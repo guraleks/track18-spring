@@ -6,7 +6,11 @@ import java.util.NoSuchElementException;
  * Должен наследовать List
  * Односвязный список
  */
-public class MyLinkedList extends List {
+public class MyLinkedList extends List implements Queue, Stack {
+
+    private int size = 0;
+    private Node head = null;
+    private Node tail = null;
 
     /**
      * private - используется для сокрытия этого класса от других.
@@ -28,20 +32,97 @@ public class MyLinkedList extends List {
 
     @Override
     void add(int item) {
+        Node node = new Node(head, tail, item);
+        if (tail == null) {
+            tail = node;
+            head = node;
+            size++;
+        } else {
+            node.prev = tail;
+            tail.next = node;
+            node.next = null;
+            tail = node;
+            size++;
+        }
     }
 
     @Override
     int remove(int idx) throws NoSuchElementException {
-        return 0;
+        if (idx < size) {
+            if (idx >= 0) {
+                int i = 0;
+                Node current = head;
+                while (i != idx) {
+                    current = current.next;
+                    i++;
+                }
+                if (current.prev != null) {
+                    current.prev.next = current.next;
+                } else {
+                    head = current.next;
+                }
+                if (current.next != null) {
+                    current.next.prev = current.prev;
+                } else {
+                    tail = current.prev;
+                }
+                size--;
+                return current.val;
+            } else {
+                throw new NoSuchElementException();
+            }
+        } else {
+            throw new NoSuchElementException();
+        }
     }
 
     @Override
     int get(int idx) throws NoSuchElementException {
-        return 0;
+        if (idx < size) {
+            if (idx >= 0) {
+                Node current = head;
+                for (int i = 0; i < idx; i++) {
+                    current = current.next;
+                }
+                return current.val;
+            } else {
+                throw new NoSuchElementException();
+            }
+        } else {
+            throw new NoSuchElementException();
+        }
     }
 
     @Override
     int size() {
-        return 0;
+        return size;
+    }
+
+
+    /*методы интерфейсов*/
+    @Override
+    public void enqueue(int value) {
+        add(value);
+    }
+
+    @Override
+    public int dequeue() {
+        return remove(0);
+    }
+
+    @Override
+    public void push(int value) {
+        add(value);
+    }
+
+    @Override
+    public int pop() {
+        int i = 0;
+        Node current = head;
+        while (current.next != null) {
+            current = current.next;
+            i++;
+        }
+        return remove(i);
     }
 }
