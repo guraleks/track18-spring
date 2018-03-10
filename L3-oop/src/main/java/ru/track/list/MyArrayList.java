@@ -43,10 +43,10 @@ public class MyArrayList extends List {
     int remove(int idx) throws NoSuchElementException {
         if (idx < size) {
             if (idx >= 0) {
-                int elem = storage[idx];
                 MyArrayList myArrayList = new MyArrayList(capacity);
                 System.arraycopy(this.storage, 0, myArrayList.storage, 0, idx);
                 System.arraycopy(this.storage, idx + 1, myArrayList.storage, idx, size - idx - 1);
+                int elem = storage[idx];
                 storage = myArrayList.storage;
                 size--;
                 return elem;

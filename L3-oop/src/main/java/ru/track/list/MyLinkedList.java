@@ -50,11 +50,11 @@ public class MyLinkedList extends List implements Queue, Stack {
     int remove(int idx) throws NoSuchElementException {
         if (idx < size) {
             if (idx >= 0) {
-                int i = 0;
+                int num = 0;
                 Node current = head;
-                while (i != idx) {
+                while (num != idx) {
                     current = current.next;
-                    i++;
+                    num++;
                 }
                 if (current.prev != null) {
                     current.prev.next = current.next;
@@ -117,12 +117,12 @@ public class MyLinkedList extends List implements Queue, Stack {
 
     @Override
     public int pop() {
-        int i = 0;
+        int num = 0;
         Node current = head;
         while (current.next != null) {
             current = current.next;
-            i++;
+            num++;
         }
-        return remove(i);
+        return remove(num);
     }
 }
