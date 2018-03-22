@@ -38,11 +38,11 @@ public class CypherUtil {
         return cypherMap;
     }
 
-    public static void main(String[] args) {
-        Map<Character, Character> map = CypherUtil.generateCypher();
-        System.out.println(map);
-        System.out.println(new Encoder().encode(map, "abcdef"));
-        System.out.println(new Decoder("", "").createHist("abcccccccccccdqwertyyyyyaaac"));
-    }
+//    public static void main(String[] args) {
+//        Map<Character, Character> map = CypherUtil.generateCypher();
+//        System.out.println(map);
+//        System.out.println(new Encoder().encode(map, "abcdef"));
+//        System.out.println(new Decoder("", "").createHist("abcccccccccccdqwertyyyyyaaac"));
+//    }
 
 }
