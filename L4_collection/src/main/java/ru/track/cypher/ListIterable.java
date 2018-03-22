@@ -1,6 +1,5 @@
 package ru.track.cypher;
 
-
 import java.util.Iterator;
 
 /**

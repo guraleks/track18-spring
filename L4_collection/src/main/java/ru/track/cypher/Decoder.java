@@ -1,9 +1,10 @@
 package ru.track.cypher;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 import org.jetbrains.annotations.NotNull;
+
+import static java.lang.Character.isLetter;
 
 public class Decoder {
 
@@ -21,10 +22,21 @@ public class Decoder {
     public Decoder(@NotNull String domain, @NotNull String encryptedDomain) {
         Map<Character, Integer> domainHist = createHist(domain);
         Map<Character, Integer> encryptedDomainHist = createHist(encryptedDomain);
-
         cypher = new LinkedHashMap<>();
 
+        List<Map.Entry<Character, Integer>> domainHistList = new ArrayList<>();
+        List<Map.Entry<Character, Integer>> encryptedDomainHistList = new ArrayList<>();
 
+        domainHistList.addAll(domainHist.entrySet());
+        encryptedDomainHistList.addAll(encryptedDomainHist.entrySet());
+
+        for (int i = 0; i < encryptedDomainHist.size(); i++) {
+            if (encryptedDomainHistList.get(i) != null && domainHistList.get(i) != null) {
+                cypher.put(encryptedDomainHistList.get(i).getKey(), domainHistList.get(i).getKey());
+            } else {
+                cypher.put(' ', domainHistList.get(i).getKey());
+            }
+        }
     }
 
     public Map<Character, Character> getCypher() {
@@ -39,13 +51,24 @@ public class Decoder {
      */
     @NotNull
     public String decode(@NotNull String encoded) {
-        return null;
+        if (!encoded.equals("")) {
+            StringBuilder encodeText = new StringBuilder();
+            for (char c : encoded.toLowerCase().toCharArray()) {
+                if (isLetter(c)) {
+                    encodeText.append(String.valueOf(cypher.get(c)));
+                } else {
+                    encodeText.append(c);
+                }
+            }
+            return new String(encodeText);
+        } else {
+            return "";
+        }
     }
 
     /**
      * Считывает входной текст посимвольно, буквы сохраняет в мапу.
      * Большие буквы приводит к маленьким
-     *
      *
      * @param text - входной текст
      * @return - мапа с частотой вхождения каждой буквы (Ключ - буква в нижнем регистре)
@@ -53,7 +76,32 @@ public class Decoder {
      */
     @NotNull
     Map<Character, Integer> createHist(@NotNull String text) {
-        return null;
-    }
 
+        Map<Character, Integer> hist = new HashMap<>();
+
+        for (char c : text.toLowerCase().toCharArray()) {
+            if (isLetter(c)) {
+                if (!hist.containsKey(c)) {
+                    hist.put(c, 1);
+                } else {
+                    hist.put(c, hist.get(c) + 1);
+                }
+            }
+        }
+
+        List<Map.Entry<Character, Integer>> list = new ArrayList<>(hist.entrySet());
+        Collections.sort(list, new Comparator<Map.Entry<Character, Integer>>() {
+            @Override
+            public int compare(Map.Entry<Character, Integer> current, Map.Entry<Character, Integer> another) {
+                return another.getValue() - current.getValue();
+            }
+        });
+
+        Map<Character, Integer> sortedHist = new LinkedHashMap<>();
+        for (Map.Entry<Character, Integer> entry : list) {
+            sortedHist.put(entry.getKey(), entry.getValue());
+        }
+
+        return sortedHist;
+    }
 }

@@ -4,6 +4,8 @@ import java.util.Map;
 
 import org.jetbrains.annotations.NotNull;
 
+import static java.lang.Character.isLetter;
+
 /**
  * Класс умеет кодировать сообщение используя шифр
  */
@@ -21,6 +23,18 @@ public class Encoder {
      * @return зашифрованный текст
      */
     public String encode(@NotNull Map<Character, Character> cypherTable, @NotNull String text) {
-        return null;
+        if (!text.equals("")) {
+            StringBuilder encodeText = new StringBuilder();
+            for (char c : text.toLowerCase().toCharArray()) {
+                if (isLetter(c)) {
+                    encodeText.append(String.valueOf(cypherTable.get(c)));
+                } else {
+                    encodeText.append(c);
+                }
+            }
+            return new String(encodeText);
+        } else {
+            return "";
+        }
     }
 }
